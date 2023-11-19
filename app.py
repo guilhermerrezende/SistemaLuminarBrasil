@@ -33,8 +33,8 @@ bcrypt = Bcrypt(app)
 CORS(app, supports_credentials=True)
 app.secret_key = 'guilherme21'
 
-UPLOAD_FOLDER = 'C:\\Users\\Guilh\\OneDrive\\Documentos\\Sistema Cotação Luminar\\Sistema Cotação Luminar\\uploads'
-
+UPLOAD_FOLDER = 'C:\\Users\\Guilh\\OneDrive\\Documentos\\Sistema Cotação Luminar\\uploads'
+              
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
