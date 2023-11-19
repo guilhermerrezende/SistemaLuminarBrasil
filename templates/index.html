@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Usuário</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <h1>Criar Novo Usuário</h1>
+    
+    <form id="criarUsuarioForm">
+        <label for="nome">Username:</label>
+        <input type="text" name="nome" required>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        
+        <button type="submit">Criar Usuário</button>
+    </form>
+
+    <script>
+        $('#criarUsuarioForm').submit(function(event) {
+            event.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '/criar_usuario',
+                method: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                dataType: 'text',
+                data: formData,
+                success: function (response) {
+                    alert(response);
+                    // Redirecionar o usuário ou realizar outras ações
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                    alert('Erro ao criar usuário: ' + xhr.responseText);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

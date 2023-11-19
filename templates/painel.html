@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo Para Vendedores</title>
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fff;
+      color: #000;
+    }
+    .container {
+      display: flex;
+    }
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        background-color: #1A7B79;
+        padding: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    
+    
+    .logo {
+      width: 50%;
+      margin: auto;
+      text-align: center;
+    }
+    .logo img {
+      width: 50%;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+    nav a {
+      text-decoration: none;
+      color: #fff;
+      display: block;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    nav a:hover {
+      background-color: #13856b;
+    }
+    main {
+        flex-grow: 1;
+        padding: 20px;
+        margin-left: 300px; /* Adicione essa linha */
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 40px;
+    }
+    .dashboard {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .dashboard-item {
+      background-color: #f4f4f4;
+      padding: 20px;
+      border-radius: 5px;
+      width: 30%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .buttons {
+      display: flex;
+      gap: 20px;
+    }
+    button {
+      background-color: #1A7B79;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #13856b;
+    }
+    .vendor-materials {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .vendor-materials h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .vendor-materials p {
+      margin: 5px 0;
+    }
+    .vendor-materials a {
+      color: #1A7B79;
+      text-decoration: none;
+    }
+    .vendor-materials a:hover {
+      text-decoration: underline;
+    }
+    .pdf-links {
+      margin-top: 10px;
+      list-style: none;
+      padding: 0;
+    }
+    .pdf-links li {
+      margin-bottom: 5px;
+    }
+    .welcome-text {
+      color: #fff;
+      font-size: 20px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    footer {
+      background-color: #D3D3D3;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .statistics, .commission-calculator {
+        background-color: #f4f4f4;
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      
+      .statistics h2, .commission-calculator h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+      
+      .commission-calculator form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .commission-calculator label {
+        font-weight: bold;
+      }
+      
+      .commission-calculator input {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+      }
+      
+      .commission-calculator button {
+        background-color: #1A7B79;
+        color: #fff;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+      }
+      
+      .commission-calculator button:hover {
+        background-color: #13856b;
+      }
+      
+  </style>
+</head>
+<script>
+  
+  
+    
+   
+function adicionarComissao() {
+    const numeroPedido = document.getElementById('numeroPedido').value;
+    const dataPedido = document.getElementById('dataPedido').value;
+    const comissao = document.getElementById('comissao').value;
+    const valorVenda = document.getElementById('valorVenda').value;
+
+    if (numeroPedido && dataPedido && comissao && valorVenda) {
+        const valorComissao = parseFloat((parseFloat(valorVenda) * parseFloat(comissao) / 100).toFixed(2));
+        
+        
+
+
+        fetch('/adicionar_comissao', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                numeroPedido,
+                dataPedido,
+                comissao,
+                valorVenda,
+                valorComissao
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Erro ao adicionar comissão:', error);
+        });
+    } else {
+        alert('Por favor, preencha todos os campos.');
+    }
+}
+
+
+
+  </script>
+  
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      
+      <div class="welcome-text">Seja Bem Vindo {{ user_name }}! A Luminar Brasil!</div>
+      <nav>
+        <ul>
+          <li><a href="#">Visualizar Últimos Pedidos</a></li>
+          <li><a href="#">Visualizar Últimos Orçamentos</a></li>
+          <li><a href="#">Visualizar Lista de Produtos</a></li>
+          <li><a href="#">Manual da Luminar Brasil</a></li>
+          <li><a href="#">Regras para Vendedores</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main>
+      <div class="logo">
+        <img src="https://luminarbrasil.com.br/wp-content/uploads/2023/06/WhatsApp-Image-2023-03-16-at-22.26.51-1.jpg" alt="Logo Luminar Brasil">
+      </div>
+      <h1>Painel Administrativo Para Vendedores</h1>
+      <div class="statistics">
+        <h2>Estatísticas</h2>
+        <p>Total de Orçamentos Gerados: <span id="totalOrcamentos"></span></p>
+
+      
+      </div>
+      <div class="vendor-materials">
+        <h2>Materiais para Vendedores</h2>
+        <p>Abaixo estão alguns links para materiais úteis para nossos vendedores:</p>
+        <ul class="pdf-links">
+            <li><a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Manual__LuminarBrasil.pdf" target="_blank">Manual Luminar Brasil</a></li>
+            <li><a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf" target="_blank">Catálogo - Luminar Brasil</a></li>
+            <li><a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf" target="_blank">Luminar Brasil - Catalogo Técnico</a></li>
+            <li><a href="https://luminarbrasil.com.br/wp-content/uploads/2023/06/DATASHEET-REFLETORES-1.pdf" target="_blank">Datasheet Refletores</a></li>
+        </ul>
+      </div>
+      </ul>
+      
+      
+      <div class="dashboard">
+        <div class="dashboard-item">
+          <h2>Últimos Pedidos</h2>
+          <p>Aqui você pode visualizar e acompanhar os últimos pedidos realizados.</p>
+          <div class="buttons">
+            <button>Ver Todos os Pedidos</button>
+            <button>Novo Pedido</button>
+          </div>
+        </div>
+        <div class="dashboard-item">
+          <h2>Últimos Orçamentos</h2>
+          <p>Aqui você pode visualizar e acompanhar os últimos orçamentos solicitados.</p>
+          <div class="buttons">
+            <button id="viewAllOrnamentsBtn">Ver Todos os Orçamentos</button>
+            <button id="createNewOrnamentBtn">Novo Orçamento</button>
+          </div>
+        </div>
+        
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            carregarTotalOrcamentos();
+        });
+        
+        function carregarTotalOrcamentos() {
+            fetch('/contar_orcamentos_usuario', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.total_orcamentos !== undefined) {
+                    document.getElementById('totalOrcamentos').textContent = data.total_orcamentos;
+                }
+            })
+            .catch(error => console.error('Erro ao carregar total de orçamentos:', error));
+        }
+        
+          document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('viewAllOrnamentsBtn').addEventListener('click', function() {
+              window.location.href = '/orcamentos';
+            });
+        
+            document.getElementById('createNewOrnamentBtn').addEventListener('click', function() {
+              // Adicione aqui a lógica para criar um novo orçamento
+            });
+          });
+        </script>
+        <script>
+          document.getElementById('createNewOrnamentBtn').addEventListener('click', function() {
+              window.location.href = '/home';
+          });
+          </script>
+          
+        <div class="dashboard-item">
+  <h2>Lista de Produtos</h2>
+  <p>Aqui você pode visualizar a lista completa de produtos disponíveis para venda.</p>
+  <button id="viewProductsBtn" class="btn btn-primary">Visualizar Produtos</button>
+</div>
+
+<script>
+
+  window.onload = function() {
+    const totalComissoes = localStorage.getItem("totalComissoes");
+    if (totalComissoes) {
+        // Encontrar o elemento pelo ID e definir seu conteúdo
+        document.getElementById("totalComissoes").textContent = `Valor Total das Comissões: R$ ${totalComissoes}`;
+    } else {
+        document.getElementById("totalComissoes").textContent = "Nenhum valor de comissão disponível.";
+    }
+};
+
+  
+
+  
+document.getElementById('viewProductsBtn').addEventListener('click', function() {
+  window.location.href = '/produtos';
+});
+</script>
+
+      </div>
+      
+      <div class="commission-calculator">
+        <h2>Calculadora de Comissões</h2>
+        <form id="commissionForm">
+          <label for="numeroPedido">Número do Pedido:</label>
+          <input type="text" id="numeroPedido" required>
+          <label for="dataPedido">Data do Pedido:</label>
+          <input type="date" id="dataPedido" required>
+          <label for="comissao">Comissão (em %):</label>
+          <input type="number" id="comissao" required>
+          <label for="valorVenda">Valor total da venda (em reais):</label>
+          <input type="number" id="valorVenda" required>
+          <button type="button" onclick="adicionarComissao()">Adicionar Comissão</button>
+        </form>
+        <p><span id="totalComissoes">0</span></p>
+        <button onclick="window.location.href='/pagina_comissoes'">Editar Comissões</button>
+
+        
+      </div>
+    </main>
+  </div>
+  <footer>
+    © 2023 Luminar Brasil. Todos os direitos reservados.
+  </footer>
+</body>
+</html>
