@@ -1,3 +1,17 @@
 waitress
 Flask==2.0.1
 requests==2.25.1
+flask_bcrypt
+flask_cors
+datetime
+os
+PIL
+psycopg2
+psycopg2.extras 
+werkzeug.utils 
+werkzeug.security 
+reportlab.lib.pagesizes 
+reportlab.platypus 
+reportlab.lib.styles 
+reportlab.lib 
+
