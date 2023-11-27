@@ -1,2 +1,21 @@
 waitress
-
+flask 
+from flask import  request, jsonify, redirect, session, render_template, send_file,make_response, url_for , Blueprint, current_app, send_from_directory
+from PIL import Image as PILImage
+import psycopg2
+from .gerarPDF import gerar_pdf
+from .db import get_connection, put_connection
+from psycopg2.extras import RealDictCursor
+from werkzeug.utils import secure_filename
+from flask_bcrypt import bcrypt
+import os
+from werkzeug.security import check_password_hash, generate_password_hash
+from flask_bcrypt import Bcrypt
+rotas_blueprint = Blueprint('rotas', __name__)
+from flask import Flask
+from flask_bcrypt import Bcrypt
+from flask_cors import CORS
+import os
+from datetime import timedelta
+import psycopg2
+from psycopg2 import pool
