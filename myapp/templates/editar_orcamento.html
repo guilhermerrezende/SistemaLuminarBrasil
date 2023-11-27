@@ -237,7 +237,27 @@
             .catch(error => console.error('Erro ao gerar PDF:', error));
         }
         
-
+        function atualizarQuantidadeProdutos() {
+            const quantidadeAtual = document.querySelectorAll('#produtosContainer fieldset').length;
+            const novaQuantidade = parseInt(document.getElementById('quantidade_produtos').value);
+        
+            if (novaQuantidade > quantidadeAtual) {
+                // Adicionar novos campos de produtos
+                for (let i = quantidadeAtual; i < novaQuantidade; i++) {
+                    adicionarCampoProduto(i);
+                }
+            } else if (novaQuantidade < quantidadeAtual) {
+                // Remover campos de produtos extras
+                for (let i = quantidadeAtual - 1; i >= novaQuantidade; i--) {
+                    const produtoParaRemover = document.getElementById(`produto_${i}`);
+                    if (produtoParaRemover) produtoParaRemover.remove();
+                }
+            }
+        }
+        
+        // Adicione um event listener ao campo de quantidade de produtos
+        document.getElementById('quantidade_produtos').addEventListener('change', atualizarQuantidadeProdutos);
+        
         function carregarProdutos(orcamentoId) {
             fetch(`/get_produtos/${orcamentoId}`, { method: 'GET' })
             .then(response => response.json())

@@ -119,6 +119,39 @@
         bottom: 0;
         width: 100%;
     }
+
+    @media screen and (max-width: 768px) {
+        .main-container {
+            width: 95%;
+            margin: 10px;
+        }
+
+        h2 {
+            font-size: 1.5rem; /* 24px */
+        }
+
+        .sidebar {
+            width: 200px;
+        }
+
+        form {
+            gap: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 0.875rem; /* 14px */
+        }
+    }
 </style>
 
 <body>
@@ -160,8 +193,9 @@
             <label for="email">Email:</label>
             <input type="email" id="email" name="email"><br><br>
 
-            <label for="endereco">Endereço:</label>
-            <input type="text" id="endereco" name="endereco"><br><br>
+            <label for="endereco">Endereço: </label>
+            <textarea id="endereco" name="endereco"></textarea><br><br>
+            
         </div>
 
         <!-- Informações Adicionais -->
@@ -181,7 +215,7 @@
             <label for="frete">Tipo de Frete: CIF ou FOB.</label>
             <input type="text" id="frete" name="frete"><br><br>
 
-            <label for="prazo_entrega">Prazo de Entrega:</label>
+            <label for="prazo_entrega">Prazo de Entrega:(em dias úteis) </label>
             <input type="text" id="prazo_entrega" name="prazo_entrega"><br><br>
         </div>
 
@@ -203,10 +237,10 @@
           
         </div>
 
+        <p>Antes de Gerar o PDF, lembre-se de salvar o pdf, pois depois não será possível.</p>
+        <input type="submit" value="Gerar PDF" class="button">
 
-        <input type="submit" value="Gerar PDF">
-
-        <input type="button" value="Salvar" onclick="salvarOrcamento()">
+        <input type="button" value="Salvar" onclick="salvarOrcamento()" class="button">
         <div>
           
         </div>
@@ -263,7 +297,7 @@
                             <label for="produto_nome_${i}">Nome do Produto:</label>
                             <input type="text" id="nome_${i}" name="produtos[${i}][nome]"><br><br>
 
-                            <label for="produto_preco_${i}">Preço do Produto:</label>
+                            <label for="produto_preco_${i}">Preço do Produto ( Separe com pontos(.) os valores, exemplo: 2.99, não coloque o R$ antes, apenas números):</label>
                             <input type="number" id="produto_preco_${i}" name="produtos[${i}][preco_produto]" step="0.01"><br><br>
 
 
@@ -275,7 +309,7 @@
                             <label for="produto_imagem_${i}">Imagem do Produto:</label>
                             <img id="imagem_preview_${i}" src="" style="display:none; max-width: 100px; max-height: 100px;"><br><br>
                             <input type="file" name="produtos[${i}][imagem]" id="imagem${i}" onchange="atualizarPreviewImagem(this, ${i})"><br><br>   
-                                
+                            <input type="hidden" id="produto_imagem_caminho_${i}" name="produtos[${i}][caminho_imagem]">     
                             
     
                             
@@ -313,30 +347,38 @@
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById(`nome_${index}`).value = data.nome;
-                    document.getElementById(`produto_preco_${index}`).value = data.preco_unitario;
+                    // Definir o nome e o preço do produto
+                    const nomeEl = document.getElementById(`nome_${index}`);
+                    if (nomeEl) nomeEl.value = data.nome;
+            
+                    const precoEl = document.getElementById(`produto_preco_${index}`);
+                    if (precoEl) precoEl.value = data.preco_unitario;
             
                     // Armazenar o caminho da imagem em um campo oculto
+                    // Armazenar o caminho da imagem em um campo oculto
                     const imgPathInput = document.getElementById(`produto_imagem_caminho_${index}`);
-                    if (data.caminho_imagem) {
-                        imgPathInput.value = data.caminho_imagem;
-            
-                        // Exibir a pré-visualização da imagem
-                        const imgPreview = document.getElementById(`imagem_preview_${index}`);
-                        imgPreview.src = `http://localhost:5000/uploads/${data.caminho_imagem}`;
-                        imgPreview.style.display = 'block';
-                    } else {
-                        imgPathInput.value = '';
-                        imgPreview.style.display = 'none';
+                    if (imgPathInput) {
+                        imgPathInput.value = data.caminho_imagem ? data.caminho_imagem : '';
                     }
+
+                    // Exibir a pré-visualização da imagem
+                    const imgPreview = document.getElementById(`imagem_preview_${index}`);
+                    if (imgPreview) {
+                        if (data.caminho_imagem) {
+                            let imagePath = data.caminho_imagem.startsWith('/uploads/') ? data.caminho_imagem : '/uploads/' + data.caminho_imagem;
+                            imgPreview.src = `http://localhost:5000${imagePath}`;
+                            imgPreview.style.display = 'block';
+                        } else {
+                            imgPreview.style.display = 'none';
+                        }
+                    }
+
                 })
                 .catch(error => {
                     console.error('Erro ao buscar produto:', error);
                     alert(error.message);
                 });
             }
-            
-            
             
             
         function atualizarFormaPagamento() {
@@ -348,7 +390,7 @@
                     
                     <input type="hidden" id="valor_total" value="{{ valor_total }}">
                 
-                    <label for="entrada">Entrada:</label>
+                    <label for="entrada">Entrada:(Se não tiver entrada coloque Zero(0))</label>
                     <input type="number" id="entrada" name="entrada" step="0.01"><br><br>
 
                     <label for="num_parcelas">Número de Parcelas: (Não deixe em branco ou 0) </label>

@@ -1,6 +1,8 @@
 import psycopg2
 from psycopg2 import pool
 
+
+
 DATABASE = 'luminarbrasil'
 USER = 'postgres'
 PASSWORD = '217881'

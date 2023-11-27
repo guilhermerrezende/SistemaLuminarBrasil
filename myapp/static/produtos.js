@@ -24,8 +24,7 @@ function carregarProdutos() {
           <td><img src="/uploads/${produto[3].split('\\').pop()}" alt="${produto[1]}" width="50" height="50"></td>
           <td>
           
-              <button onclick="editarProduto(${produto[0]})">Editar</button>
-              <button onclick="excluirProduto(${produto[0]})">Excluir</button>
+            
           </td>
 `;
 

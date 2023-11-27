@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualização de PDFs</title>
+    <link rel="stylesheet" href="seu_arquivo.css"> <!-- Inclua seu arquivo CSS aqui -->
+    <style>
+        .logo img {
+            width: 30%; /* Tamanho reduzido da logo */
+        }
+        
+        .btn-logout {
+            background-color: #1A7B79; /* Cor de fundo do botão */
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 20px;
+            transition: background-color 0.3s, color 0.3s; /* Transição suave para hover */
+        }
+        
+        .btn-logout:hover {
+            background-color: #13856b; /* Cor de fundo ao passar o mouse */
+            color: #fff; /* Cor do texto ao passar o mouse */
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px; /* Adicionado espaço interno */
+        }
+        
+        /* Responsividade para a logo e o botão */
+        @media screen and (max-width: 768px) {
+            .logo img {
+                width: 50%; /* Tamanho maior para telas menores */
+            }
+        
+            .header {
+                flex-direction: column;
+            }
+        
+            .btn-logout {
+                margin-top: 10px;
+                width: 100%; /* Botão mais largo em telas menores */
+            }
+        }
+        
+        
+        .container {
+            margin: 20px;
+            max-width: 1200px; /* Limita a largura máxima do container */
+            margin: 0 auto; /* Centraliza o container */
+        }
+
+        .pdf-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start; /* Alinha os itens à esquerda */
+            gap: 20px; /* Espaço entre os elementos */
+        }
+
+        .pdf-preview {
+            flex: 1;
+            min-width: calc(10% - 5px); /* Largura para 3 por linha com espaço entre eles */
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .pdf-preview iframe {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+
+        .pdf-download {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .pdf-preview {
+                min-width: calc(50% - 20px); /* 2 por linha em telas menores */
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .pdf-preview {
+                min-width: 100%; /* 1 por linha em telas muito pequenas */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/logo.png" alt="Logo Luminar Brasil">
+        </div>
+        <button onclick="window.location.href='/painel'" class="btn-logout">Voltar para o Painel</button>
+    </div>
+
+    <div class="container">
+        <div class="pdf-preview-container">
+            <!-- Repita o bloco abaixo para cada PDF -->
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+
+                <div class="pdf-preview">
+                    <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf"></iframe>
+                    <div class="pdf-download">
+                        <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                    </div>
+                    <div class="pdf-preview">
+                        <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf"></iframe>
+                        <div class="pdf-download">
+                            <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                        </div>
+
+
+            </div>
+            <!-- Repita o bloco acima para cada PDF adicional, ajustando o link e o texto de download -->
+        </div>
+    </div>
+</body>
+</html>
