@@ -1,4 +1,4 @@
-# run.py
+
 from myapp import app  # Importando app do pacote meuapp
 
 if __name__ == '__main__':
