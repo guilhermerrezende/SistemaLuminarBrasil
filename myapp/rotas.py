@@ -14,16 +14,16 @@ rotas_blueprint = Blueprint('rotas', __name__)
 
            
 # Configurações do Banco de Dados
-DATABASE = 'luminarbrasil'
+DATABASE = 'postgres'
 USER = 'postgres'
-PASSWORD = '217881'
-HOST = 'localhost'
+PASSWORD = '21788102'
+HOST = 'luminar-1.c1tcpi4qrlgu.us-east-1.rds.amazonaws.com'
 PORT = '5432'
 
 
 
 # Configuração do banco de dados
-DATABASE_URL = "postgres://postgres:217881@localhost/luminarbrasil?client_encoding=utf8"
+DATABASE_URL = "postgres://postgres:21788102@luminar-1.c1tcpi4qrlgu.us-east-1.rds.amazonaws.com/postgres?client_encoding=utf8"
 
 
 
