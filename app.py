@@ -7,7 +7,7 @@ from datetime import timedelta
 
 CORS(app, supports_credentials=True)
 
-app.register_blueprint(rotas_blueprint)
+
 
 if __name__ == "__main__":
     app.run()

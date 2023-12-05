@@ -7,4 +7,4 @@ Pillow
 psycopg2
 Werkzeug
 reportlab
-
+gunicorn
