@@ -18,9 +18,8 @@ from flask import send_file
 
 
 def adicionar_logo_e_plano_de_fundo(canvas, doc, numero_orcamento, data_orcamento,tipo):
-    caminho_logo = r"imagens\plano.png"
-    caminho_plano_fundo = r"imagens\plano.png"
-
+    caminho_logo = r"imagens/plano.png"
+    caminho_plano_fundo = r"imagens/plano.png"
     # Logo e plano de fundo em todas as páginas
     canvas.saveState()
     logo = Image(caminho_logo, width=120, height=120)
