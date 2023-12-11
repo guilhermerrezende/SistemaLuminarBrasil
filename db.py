@@ -7,7 +7,7 @@ PASSWORD = '21788102'
 HOST = 'luminar-1.c1tcpi4qrlgu.us-east-1.rds.amazonaws.com'
 PORT = '5432'
 
-# Configurar pool de conexão
+# Configurar pool de conexãofffff
 connection_pool = psycopg2.pool.SimpleConnectionPool(
     1, 20,
     user=USER,
