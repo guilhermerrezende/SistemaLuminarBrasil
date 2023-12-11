@@ -8,10 +8,13 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 from reportlab.platypus import Image
 from reportlab.lib.enums import TA_JUSTIFY
-from flask import render_template,send_file
+from flask import render_template,send_file, Response
 from flask import  request,  current_app
 from werkzeug.utils import secure_filename
 import os
+from reportlab.pdfgen import canvas
+from io import BytesIO
+from flask import send_file
 
 
 def adicionar_logo_e_plano_de_fundo(canvas, doc, numero_orcamento, data_orcamento,tipo):
@@ -52,15 +55,15 @@ def gerar_pdf(tipo,numero_orcamento, data_orcamento, produtos, valor_total, quan
               forma_pagamento, num_parcelas, valor_parcela, entrada):
     
     
+    caminho_completo_pdf = os.path.join('D:\\', 'Sistema Cotação Luminar', 'pdfs', f"orcamento_{numero_orcamento}.pdf")    
     doc = SimpleDocTemplate(
-    f"orcamento_{numero_orcamento}.pdf",
-    pagesize=letter,
-    topMargin=90,
-    bottomMargin=90,
-    leftMargin=20,   # Ajuste a margem esquerda
-    rightMargin=20   # Ajuste a margem direita
-)
-
+        caminho_completo_pdf,
+        pagesize=letter,
+        topMargin=90,
+        bottomMargin=90,
+        leftMargin=20,
+        rightMargin=20
+    )
     elementos = []
     
     
@@ -270,9 +273,13 @@ def gerar_pdf(tipo,numero_orcamento, data_orcamento, produtos, valor_total, quan
     def on_later_pages(canvas, doc):
         adicionar_logo_e_plano_de_fundo(canvas, doc, numero_orcamento, data_orcamento,tipo)
 
+    pdf_path = f"orcamento_{numero_orcamento}.pdf"
     doc.build(elementos, onFirstPage=on_first_page, onLaterPages=on_later_pages)
-    
-    
+    return caminho_completo_pdf
+
+
+
+
 def gerar_orcamento_login():
      return render_template("painel.html")    
  
@@ -356,11 +363,12 @@ def gerar_orcamento_form():
     else:
      valor_parcela = valor_total  
    
-    gerar_pdf(tipo, numero_orcamento, data_orcamento, produtos, valor_total, quantidade_produtos, nome,
-              nome_empresa, cnpj, telefone, email, nomevendedor, informacoesadicionais, endereco, frete, prazo_entrega,
-              forma_pagamento, num_parcelas, valor_parcela, entrada)
+    caminho_completo_pdf = gerar_pdf(tipo, numero_orcamento, data_orcamento, produtos, valor_total, 
+                                     quantidade_produtos, nome, nome_empresa, cnpj, telefone, 
+                                     email, nomevendedor, informacoesadicionais, endereco, frete, 
+                                     prazo_entrega, forma_pagamento, num_parcelas, valor_parcela, entrada)
 
-    return send_file(f"orcamento_{numero_orcamento}.pdf", as_attachment=True)
+    caminho_completo_pdf = gerar_pdf(...)
 
-
-
+    # Enviar o arquivo PDF
+    return send_file(caminho_completo_pdf, as_attachment=True)

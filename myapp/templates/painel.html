@@ -9,6 +9,7 @@
   <title>Painel Administrativo Para Vendedores</title>
   
   <style>
+
     body {
       font-family: 'Arial', sans-serif;
       margin: 0;
@@ -16,7 +17,31 @@
       background-color: #f4f4f4; /* Cor de fundo da página */
       color: #333; /* Cor do texto */
   }
-  
+  .btn-materials {
+    background-color: #1A7B79;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 20px; /* Espaçamento entre o título e o botão */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-materials:hover {
+    background-color: #13856b;
+    color: #fff;
+}
+
+  .sidebar-image {
+    width: 100%; /* Faz a imagem ocupar a largura total do sidebar */
+    height: auto; /* Mantém a proporção da imagem */
+    margin-top: 20px; /* Espaço acima da imagem */
+    border-radius: 5px; /* Bordas arredondadas, se desejar */
+}
+
   /* Container principal para centralizar o conteúdo */
   .container {
       width: 90%;
@@ -279,6 +304,41 @@
     height: 200px;
     border: 1px solid #ccc;
 }
+.ranking-champions {
+  background-color: #1A7B79;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  color: white;
+}
+
+.ranking-header {
+  display: flex;
+  align-items: center; /* Alinha verticalmente */
+  justify-content: space-between; /* Espaço entre os elementos */
+}
+
+.ranking-banner img {
+  width: 50%; /* Ajuste conforme necessário */
+  height: auto;
+  border-radius: 5px;
+}
+
+.ranking-content {
+  width: 50%; /* Ajuste conforme necessário */
+  padding-left: 20px; /* Espaço entre a imagem e o texto */
+}
+
+.ranking-champions h2 {
+  color: #fff;
+}
+
+/* Estilos adicionais conforme necessário */
+
+/* Estilos adicionais conforme necessário */
+
+
+/* Estilos adicionais conforme necessário */
 
 /* Responsividade para os PDFs */
 @media screen and (max-width: 768px) {
@@ -337,28 +397,37 @@ function adicionarComissao() {
 <body>
   <div class="container">
     <aside class="sidebar">
-      
       <div class="welcome-text">Seja Bem Vindo {{ user_name }}! A Luminar Brasil!</div>
       <nav>
-        <ul>
-          
-
-          <li><button id="viewAllOrnamentsBtn">Ver Todos os Orçamentos</button></li>
-          <button id="viewProductsBtn" class="btn btn-primary">Visualizar Produtos</button>
-          
-
-
-          <!-- painel.html -->
-          <li><a href="{{ url_for('rotas.logout') }}" class="btn-logout">Sair da Conta</a></li>
-
-        </ul>
+          <ul>
+              <li><button id="viewAllOrnamentsBtn">Ver Todos os Orçamentos</button></li>
+              <button id="viewProductsBtn" class="btn btn-primary">Visualizar Produtos</button>
+              <li><a href="{{ url_for('rotas.logout') }}" class="btn-logout">Sair da Conta</a></li>
+          </ul>
       </nav>
-    </aside>
+      <img src="https://luminarbrasil.com.br/wp-content/uploads/2023/12/Design-sem-nome-4.png" alt="Imagem Decorativa" class="sidebar-image">
+  </aside>
+  
     <main>
       <div class="logo">
         <img src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/logo.png" alt="Logo Luminar Brasil">
       </div>
       <h1>Painel Administrativo Para Vendedores</h1>
+
+      <div class="ranking-champions">
+        <div class="ranking-header">
+            <div class="ranking-banner">
+                <img src="https://luminarbrasil.com.br/wp-content/uploads/2023/12/Sem-nome-800-x-300-px.png" alt="Banner do Ranking">
+            </div>
+            <div class="ranking-content">
+                <h2>Ranking dos Campeões</h2>
+                <div id="rankingList"></div>
+            </div>
+        </div>
+    </div>
+    
+    
+    
       <div class="statistics">
         <h2>Estatísticas</h2>
         <p>Total de Orçamentos Gerados: <span id="totalOrcamentos"></span></p>
@@ -373,7 +442,7 @@ function adicionarComissao() {
           <h2>Grupo Vendedores</h2>
           <p>Aqui você pode entrar no grupo de vendedores , onde mandaremos materiais de divulgação, informações e avisos.</p>
           <div class="buttons">
-            <a href="https://chat.whatsapp.com/CwDbdnIbK5MIalDsFbFvXU" target="_blank">
+            <a href="https://chat.whatsapp.com/KC9II3RCItB04yHZtg5QxQ" target="_blank">
                 <img src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/grupo-whatsapp-removebg-preview.png" alt="Entrar no Grupo do WhatsApp">
             </a>
         </div>
@@ -388,6 +457,20 @@ function adicionarComissao() {
         </div>
         
         <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            fetch('/ranking_orcamentos')
+            .then(response => response.json())
+            .then(data => {
+                let html = '<ul>';
+                data.forEach((item, index) => {
+                    html += `<li>${index + 1}. ${item[0]} - ${item[1]} orçamentos</li>`;
+                });
+                html += '</ul>';
+                document.getElementById('rankingList').innerHTML = html;
+            })
+            .catch(error => console.error('Erro ao carregar ranking:', error));
+        });
+        
           document.addEventListener('DOMContentLoaded', function () {
             carregarTotalOrcamentos();
         });
@@ -460,7 +543,12 @@ document.getElementById('viewProductsBtn2').addEventListener('click', function()
 
       </div>
       <div class="vendor-materials">
-        <h2>Materiais para Vendedores</h2>
+        <div class="vendor-materials">
+          <h2>Materiais para Vendedores</h2>
+          <button onclick="window.location.href='/materiais'" class="btn-materials">Acessar Materiais</button>
+          <!-- Restante do seu código... -->
+      </div>
+      
         <p>Abaixo estão alguns links para materiais úteis para nossos vendedores:</p>
         <div class="container">
             <div class="pdf-preview-container">
@@ -503,6 +591,7 @@ document.getElementById('viewProductsBtn2').addEventListener('click', function()
                               <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-de-Postes-e-Acessorios-Luminar-2023-.pdf" download="Datasheet_Refletores">Download PDF Datasheet Refletores</a>
                           </div>
                         </div>
+                        
                 </div>
             </div>
         </div>

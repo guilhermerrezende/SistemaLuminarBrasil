@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     carregarOrcamentos();
+    document.getElementById('searchInput').addEventListener('keyup', function(event) {
+        filtrarOrcamentos(event.target.value);
+    });
 });
 
 function carregarOrcamentos() {
@@ -12,42 +15,51 @@ function carregarOrcamentos() {
     })
     .then(response => response.json())
     .then(orcamentos => {
-
-        const tabelaOrcamentos = document.getElementById('orcamento-list');
-
-        tabelaOrcamentos.innerHTML = '';
-        
-
-        orcamentos.forEach(orcamento => {
-            //console.log('Data recebida:', orcamento[4]); // Para diagnóstico
-
-            let dataFormatada = 'Data não disponível'; 
-            if (orcamento[4] && typeof orcamento[4] === 'string' && orcamento[8].trim() !== '') {
-                const data = new Date(orcamento[4]);
-                if (!isNaN(data.getTime())) {
-                    dataFormatada = data.toLocaleDateString('pt-BR');
-                }
-            }
-
-            
-
-            const linha = document.createElement('tr');
-            linha.innerHTML = `
-                <td>${orcamento[1]}</td>
-                <td>${dataFormatada}</td>
-                
-                <td>
-                    <button onclick="editarOrcamento(${orcamento[0]})">Editar</button>
-                    <button onclick="excluirOrcamento(${orcamento[0]})">Excluir</button>
-                </td>
-            `;
-            tabelaOrcamentos.appendChild(linha);
-        });
+        exibirOrcamentos(orcamentos);
     })
     .catch(error => console.error('Erro ao carregar orçamentos:', error));
 }
 
+function filtrarOrcamentos(query) {
+    fetch(`/filtrar_orcamentos?query=${query}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(orcamentos => {
+        exibirOrcamentos(orcamentos);
+    })
+    .catch(error => console.error('Erro ao filtrar orçamentos:', error));
+}
 
+function exibirOrcamentos(orcamentos) {
+    const tabelaOrcamentos = document.getElementById('orcamento-list');
+    tabelaOrcamentos.innerHTML = '';
+
+    orcamentos.forEach(orcamento => {
+        let dataFormatada = 'Data não disponível'; 
+        if (orcamento[4] && typeof orcamento[4] === 'string' && orcamento[4].trim() !== '') {
+            const data = new Date(orcamento[4]);
+            if (!isNaN(data.getTime())) {
+                dataFormatada = data.toLocaleDateString('pt-BR');
+            }
+        }
+
+        const linha = document.createElement('tr');
+        linha.innerHTML = `
+            <td>${orcamento[1]}</td>
+            <td>${dataFormatada}</td>
+            <td>
+                <button onclick="editarOrcamento(${orcamento[0]})">Editar</button>
+                <button onclick="excluirOrcamento(${orcamento[0]})">Excluir</button>
+            </td>
+        `;
+        tabelaOrcamentos.appendChild(linha);
+    });
+}
 
 function editarOrcamento(id) {
     // Redireciona para a página de edição do orçamento

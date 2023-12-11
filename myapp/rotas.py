@@ -1,7 +1,7 @@
-from flask import  request, jsonify, redirect, session, render_template, send_file,make_response, url_for , Blueprint, current_app, send_from_directory
+from flask import  request, jsonify, redirect, session, render_template, send_file,make_response, url_for , Blueprint, current_app, send_from_directory, Response
 from PIL import Image as PILImage
 import psycopg2
-from .gerarPDF import gerar_pdf
+from myapp.gerarPDF import gerar_pdf
 from .db import get_connection, put_connection
 from psycopg2.extras import RealDictCursor
 from werkzeug.utils import secure_filename
@@ -10,8 +10,8 @@ import os
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_bcrypt import Bcrypt
 rotas_blueprint = Blueprint('rotas', __name__)
-
-
+from reportlab.pdfgen import canvas
+from io import BytesIO
            
 # Configurações do Banco de Dados
 DATABASE = 'postgres'
@@ -34,6 +34,54 @@ def get_db_connection():
     return conn
 
 
+
+@rotas_blueprint.route('/filtrar_produtos', methods=['GET'])
+def filtrar_produtos():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Usuário não autenticado'}), 401
+    user_id = session['user_id']
+    query = request.args.get('query', '')
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, nome, preco_unitario, caminho_imagem FROM produtos WHERE user_id = %s AND (CAST(id as TEXT) LIKE %s OR nome LIKE %s)", (user_id, f"%{query}%", f"%{query}%"))
+    produtos = cur.fetchall()
+    cur.close()
+    conn.close()
+    return jsonify(produtos)
+
+
+@rotas_blueprint.route('/filtrar_orcamentos', methods=['GET'])
+def filtrar_orcamentos():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Usuário não autenticado'}), 401
+    user_id = session['user_id']
+    query = request.args.get('query', '')
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM orcamentos WHERE user_id = %s AND numero_orcamento LIKE %s", (user_id, f"%{query}%"))
+    orcamentos = cur.fetchall()
+    cur.close()
+    conn.close()
+    return jsonify(orcamentos)
+
+@rotas_blueprint.route('/ranking_orcamentos', methods=['GET'])
+def ranking_orcamentos():
+    try:
+        conn = psycopg2.connect(f"dbname={DATABASE} user={USER} password={PASSWORD} host={HOST} port={PORT}")
+        cur = conn.cursor()
+        cur.execute('''
+            SELECT u.nome, COUNT(o.id) as total_orcamentos
+            FROM usuarios u
+            JOIN orcamentos o ON u.id = o.user_id
+            GROUP BY u.nome
+            ORDER BY total_orcamentos DESC
+        ''')
+        ranking = cur.fetchall()
+        cur.close()
+        conn.close()
+        return jsonify(ranking)
+    except Exception as e:
+        return jsonify({'error': f'Erro ao buscar ranking: {e}'}), 500
 
 @rotas_blueprint.route('/get_produtos_orcamento/<int:orcamento_id>', methods=['GET'])
 
@@ -84,12 +132,12 @@ def index2():
     return render_template('materiais.html')
 
 
+
 @rotas_blueprint.route('/criar_usuario', methods=['POST'])
 def criar_usuario():
-    data = request.get_json()  # Obter dados JSON
-    nome = data.get('nome')
-    email = data.get('email')
-    password = data.get('password')
+    nome = request.form.get('nome')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
     try:
         # Gera um hash da senha usando werkzeug.security
@@ -188,7 +236,8 @@ def contar_orcamentos_usuario():
 
 def editar_orcamento(id):
     if 'user_id' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('rotas.login'))
+
     
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -386,9 +435,14 @@ def get_orcamentos():
 
 @rotas_blueprint.route('/get_produtos', methods=['GET'])
 def get_produtos():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Usuário não autenticado'}), 401
+    user_id = session['user_id']
+    # user_id = 11  # Remova esta linha para usar o ID do usuário da sessão
+
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('SELECT id, nome, preco_unitario, caminho_imagem FROM produtos')
+    cur.execute('SELECT id, nome, preco_unitario, caminho_imagem FROM produtos WHERE user_id = %s', (user_id,))
     produtos = cur.fetchall()
     cur.close()
     conn.close()
@@ -829,9 +883,10 @@ def gerar_orcamento_form():
     else:
      valor_parcela = valor_total  
    
-    gerar_pdf(tipo, numero_orcamento, data_orcamento, produtos, valor_total, quantidade_produtos, nome,
-              nome_empresa, cnpj, telefone, email, nomevendedor, informacoesadicionais, endereco, frete, prazo_entrega,
-              forma_pagamento, num_parcelas, valor_parcela, entrada)
+    caminho_completo_pdf = gerar_pdf(tipo, numero_orcamento, data_orcamento, produtos, valor_total, 
+                                     quantidade_produtos, nome, nome_empresa, cnpj, telefone, 
+                                     email, nomevendedor, informacoesadicionais, endereco, frete, 
+                                     prazo_entrega, forma_pagamento, num_parcelas, valor_parcela, entrada)
 
-    return send_file(f"orcamento_{numero_orcamento}.pdf", as_attachment=True)
-    
+    # Enviar o arquivo PDF usando o caminho completo
+    return send_file(caminho_completo_pdf, as_attachment=True)
