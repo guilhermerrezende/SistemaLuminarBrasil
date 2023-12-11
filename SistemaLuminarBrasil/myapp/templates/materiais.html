@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualização de PDFs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif; /* Fonte padrão para a página */
+            background-color: #f4f4f4; /* Cor de fundo suave */
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center; /* Centraliza o conteúdo do cabeçalho */
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .header .logo {
+            text-align: center; /* Centraliza a logo */
+        }
+
+        .header .logo img {
+            width: 200px; /* Tamanho fixo para a logo */
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        .pdf-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center; /* Centraliza os contêineres de PDF */
+        }
+
+        .pdf-preview {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 30%; /* Largura para 3 por linha */
+            margin-bottom: 20px;
+        }
+
+        .pdf-preview iframe {
+            width: 100%;
+            height: 400px; /* Altura fixa para os iframes */
+            border: none;
+        }
+
+        .pdf-download {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .pdf-download a {
+            color: #1A7B79;
+            text-decoration: none;
+        }
+
+        .pdf-download a:hover {
+            text-decoration: underline;
+        }
+        .btn-back {
+            background-color: #1A7B79;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 20px; /* Espaçamento antes dos materiais */
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .btn-back:hover {
+            background-color: #13856b;
+            color: #fff;
+        }
+        
+        @media screen and (max-width: 768px) {
+            .pdf-preview {
+                width: 48%; /* 2 por linha em telas menores */
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .pdf-preview {
+                width: 100%; /* 1 por linha em telas muito pequenas */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <img src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/logo.png" alt="Logo Luminar Brasil">
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="pdf-preview-container">
+            <!-- Repita o bloco abaixo para cada PDF -->
+            
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-Luminar-Brasil.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+            </div>
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/12/Catalogo_2024.pdf.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/12/Catalogo_2024.pdf.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+            </div>
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-de-Postes-e-Acessorios-Luminar-2023-.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Catalogo-de-Postes-e-Acessorios-Luminar-2023-.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+            </div>
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/06/Datasheet-MTX.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/06/Datasheet-MTX.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+            </div>
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/06/DATASHEET-REFLETORES-1.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/06/DATASHEET-REFLETORES-1.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+            </div>
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Manual__LuminarBrasil.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/11/Manual__LuminarBrasil.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+            </div>
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/12/DATASHEET-PUBLICA-HEROS-1.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/12/DATASHEET-PUBLICA-HEROS-1.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+            </div>
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/12/luminarbrasil.com_.br_.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/12/luminarbrasil.com_.br_.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>
+            </div>
+            <div class="pdf-preview">
+                <iframe src="https://luminarbrasil.com.br/wp-content/uploads/2023/12/Catalogo-A-TREE-2023-3.pdf"></iframe>
+                <div class="pdf-download">
+                    <a href="https://luminarbrasil.com.br/wp-content/uploads/2023/12/Catalogo-A-TREE-2023-3.pdf" download="Catalogo_Luminar_Brasil">Download PDF</a>
+                </div>    
+               
+        
+        </div>
+        </div>
+    </div>
+    <div class="container">
+        <button onclick="history.back()" class="btn-back">Voltar Para Página Anterior</button>
+        
+    </div>
+</div>
+
+</body>
+</html>

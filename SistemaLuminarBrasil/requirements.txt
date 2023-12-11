@@ -1,0 +1,10 @@
+waitress
+Flask
+requests
+flask_bcrypt
+flask_cors
+Pillow
+psycopg2
+Werkzeug
+reportlab
+gunicorn
