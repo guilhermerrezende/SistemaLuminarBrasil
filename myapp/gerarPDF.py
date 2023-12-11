@@ -54,7 +54,7 @@ def gerar_pdf(tipo,numero_orcamento, data_orcamento, produtos, valor_total, quan
               forma_pagamento, num_parcelas, valor_parcela, entrada):
     
     caminho_base = os.path.dirname(os.path.abspath(__file__))
-    caminho_completo_pdf = os.path.join(caminho_base, 'pdfs', f'orcamento_{numero_orcamento}.pdf')
+    caminho_completo_pdf = os.path.join('pdfs', f'orcamento_{numero_orcamento}.pdf')
    
     doc = SimpleDocTemplate(
         caminho_completo_pdf,
