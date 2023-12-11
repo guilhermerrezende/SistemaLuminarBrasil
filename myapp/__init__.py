@@ -12,7 +12,8 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.permanent_session_lifetime = timedelta(minutes=190)  # Sessão expira após 30 minutos de inatividade
 
 
-app.config['UPLOAD_FOLDER'] = 'C:\\Users\\Guilh\\OneDrive\\Documentos\\Sistema Cotação Luminar\\uploads'
+app.config['UPLOAD_FOLDER'] = 'uploads'
+
 
 
 bcrypt = Bcrypt(app)
