@@ -1,3 +1,3 @@
-from myapp import app  # Substitua "seu_app" pelo nome real do seu pacote
+from myapp import app  
 if __name__ == "__main__":
     app.run()
