@@ -337,16 +337,14 @@
                 }
             }
             
-            function buscarProduto(index) {
-                const codigoProduto = document.getElementById(`produto_codigo_${index}`).value;
-                fetch('/buscar_produto/' + codigoProduto)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Produto não encontrado');
-                    }
-                    return response.json();
-                })
-                .then(data => {
+            fetch('/buscar_produto/' + codigoProduto)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Produto não encontrado');
+                }
+                return response.json();
+            })
+            .then(data => {
                     // Definir o nome e o preço do produto
                     const nomeEl = document.getElementById(`nome_${index}`);
                     if (nomeEl) nomeEl.value = data.nome;
@@ -375,11 +373,12 @@
                         }
                     }
 
+                })
                 .catch(error => {
                     console.error('Erro ao buscar produto:', error);
                     alert(error.message);
                 });
-            }
+            
             
             
         function atualizarFormaPagamento() {
