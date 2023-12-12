@@ -366,14 +366,15 @@
                     if (imgPreview) {
                         if (data.caminho_imagem) {
                             let imagePath = data.caminho_imagem.startsWith('/uploads/') ? data.caminho_imagem : '/uploads/' + data.caminho_imagem;
-                            imgPreview.src = `http://localhost:5000${imagePath}`;
+                            
+                            // Substitua "http://localhost:5000" pelo endereço do seu servidor VPS e considere usar HTTPS
+                            imgPreview.src = `http://www.sistemaluminarbrasil.com.br${imagePath}`;
                             imgPreview.style.display = 'block';
                         } else {
                             imgPreview.style.display = 'none';
                         }
                     }
 
-                })
                 .catch(error => {
                     console.error('Erro ao buscar produto:', error);
                     alert(error.message);
