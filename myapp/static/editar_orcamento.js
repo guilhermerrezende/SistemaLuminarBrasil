@@ -129,7 +129,7 @@ function carregarProdutosOrcamento(orcamentoId) {
             let imagemSrc = '';
 
             if (produto.caminho_imagem) {
-                if (produto.caminho_imagem.startsWith('/uploads/')) {
+                if (produto.caminho_imagem.startsWith('/SistemaLuminarBrasil/uploads/')) {
                     // Use o caminho absoluto no servidor, sem incluir /root
                     imagemSrc = `http://www.sistemaluminarbrasil.com.br/SistemaLuminarBrasil/uploads${produto.caminho_imagem}`;
                 } else {
