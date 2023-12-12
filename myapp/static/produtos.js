@@ -10,21 +10,21 @@ function exibirProdutos(produtos) {
 
     produtos.forEach(produto => {
         const linha = document.createElement('tr');
-        let imagePath = produto[3] ? `/uploads/${produto[3].split('\\').pop()}` : 'path/to/default/image.jpg';
+        const imagePath = produto[3] ? `/uploads/${produto[3].split('\\').pop()}` : 'path/to/default/image.jpg';
+        const precoFormatado = parseFloat(produto[2]).toFixed(2);
+        
         linha.innerHTML = `
             <td>${produto[0]}</td>
             <td>${produto[1]}</td>
-            <td>R$ ${parseFloat(produto[2]).toFixed(2)}</td>
-            <td><img src="${imagePath}" alt="${produto[1]}" width="50" height="50"></td>
-            
+            <td>R$ ${precoFormatado}</td>
+            <td>${produto[3] ? `<img src="http://www.sistemaluminarbrasil.com.br${imagePath}" alt="${produto[1]}" width="50" height="50">` : 'Sem imagem'}</td>
         `;
 
         tabelaProdutos.appendChild(linha);
     });
 }
 
-  
-  function carregarProdutos() {
+function carregarProdutos() {
     fetch('/get_produtos', {
         method: 'GET',
         headers: {
@@ -34,32 +34,29 @@ function exibirProdutos(produtos) {
     })
     .then(response => response.json())
     .then(produtos => {
-        console.log(produtos); 
         const tabelaProdutos = document.getElementById('produto-list');
         tabelaProdutos.innerHTML = '';
+
         produtos.forEach(produto => {
             const linha = document.createElement('tr');
-            let imagePath = produto[3] ? `/uploads/${produto[3].split('\\').pop()}` : 'path/to/default/image.jpg';  // Adicionando verificação de nullidade
+            const imagePath = produto[3] ? `/uploads/${produto[3].split('\\').pop()}` : 'path/to/default/image.jpg';
+            const precoFormatado = parseFloat(produto[2]).toFixed(2);
+
             linha.innerHTML = `
                 <td>${produto[0]}</td>
                 <td>${produto[1]}</td>
-                <td>R$ ${parseFloat(produto[2]).toFixed(2)}</td>
-                <td><img src="${imagePath}" alt="${produto[1]}" width="50" height="50"></td>
-                <td>
-                
-                  
-                </td>
+                <td>R$ ${precoFormatado}</td>
+                <td>${produto[3] ? `<img src="http://www.sistemaluminarbrasil.com.br${imagePath}" alt="${produto[1]}" width="50" height="50">` : 'Sem imagem'}</td>
+                <td></td>
             `;
-        
+
             tabelaProdutos.appendChild(linha);
         });
-        
     })
     .catch(error => console.error('Erro ao carregar produtos:', error));
-  }
-  
-  
-  
+}
+
+
   function filtrarProdutos(query) {
     fetch(`/filtrar_produtos?query=${query}`, {
         method: 'GET',

@@ -123,7 +123,6 @@ function carregarProdutosOrcamento(orcamentoId) {
     })
     .then(produtos => {
 
-
         const produtosDiv = document.getElementById('produtosContainer');
         produtos.forEach((produto, index) => {
 
@@ -131,7 +130,8 @@ function carregarProdutosOrcamento(orcamentoId) {
 
             if (produto.caminho_imagem) {
                 if (produto.caminho_imagem.startsWith('/uploads/')) {
-                    imagemSrc = produto.caminho_imagem;
+                    // Use o caminho absoluto no servidor, sem incluir /root
+                    imagemSrc = `http://www.sistemaluminarbrasil.com.br/SistemaLuminarBrasil/uploads${produto.caminho_imagem}`;
                 } else {
                     imagemSrc = `/uploads/${produto.caminho_imagem.split('\\').pop()}`;
                 }
@@ -147,14 +147,11 @@ function carregarProdutosOrcamento(orcamentoId) {
                     <input type="number" id="produto_quantidade_${index}" name="produtos[${index}][quantidade]" value="${produto.quantidade}"><br><br>
                     <label for="produto_preco_${index}">Preço do Produto:</label>
                     <input type="number" id="produto_preco_${index}" name="produtos[${index}][preco_produto]" value="${produto.preco_unitario}" step="0.01"><br><br>
-                 
-
-
+                    
                     <input type="hidden" name="produtos[${index}][caminho_imagem]" value="${imagemSrc}"> 
                     <td>${imagemSrc ? `<img src="${imagemSrc}" alt="Imagem do Produto" width="50" height="50">` : ''}</td>
                     <input type="file" name="produtos[${index}][imagem]" id="imagem${index}"> <br/><br/>                
                     ${imagemSrc ? `<span>Se não escolher uma nova imagem, a imagem atual será mantida.</span>` : ''}
-
 
                     <button type="button" onclick="adicionarProduto()">Adicionar Produto</button>
                     <button type="button" onclick="excluirProduto(${index}, ${produto.id})">Excluir Produto</button>

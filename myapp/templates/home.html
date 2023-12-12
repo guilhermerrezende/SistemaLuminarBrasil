@@ -363,15 +363,16 @@
                     const imgPreview = document.getElementById(`imagem_preview_${index}`);
                     if (imgPreview) {
                         if (data.caminho_imagem) {
-                            let imagePath = data.caminho_imagem.startsWith('/uploads/') ? data.caminho_imagem : '/uploads/' + data.caminho_imagem;
+                            let imagePath = data.caminho_imagem;
                             
-                            // Substitua "http://localhost:5000" pelo endereço do seu servidor VPS e considere usar HTTPS
-                            imgPreview.src = `http://www.sistemaluminarbrasil.com.br${imagePath}`;
+                            // Use o caminho absoluto no servidor, sem incluir /root
+                            imgPreview.src = `http://www.sistemaluminarbrasil.com.br/SistemaLuminarBrasil/uploads${imagePath}`;
                             imgPreview.style.display = 'block';
                         } else {
                             imgPreview.style.display = 'none';
                         }
                     }
+
 
                 })
                 .catch(error => {
