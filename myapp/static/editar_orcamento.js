@@ -132,8 +132,9 @@ function carregarProdutosOrcamento(orcamentoId) {
                 if (produto.caminho_imagem.startsWith('/SistemaLuminarBrasil/uploads/')) {
                     imagemSrc = `http://www.sistemaluminarbrasil.com.br${produto.caminho_imagem}`;
                 } else {
-                    imagemSrc = `http://www.sistemaluminarbrasil.com.br/uploads/${produto.caminho_imagem.split('\\').pop()}`;
+                    imagemSrc = `http://www.sistemaluminarbrasil.com.br/SistemaLuminarBrasil/uploads/${produto.caminho_imagem.split('\\').pop()}`;
                 }
+                
             }
 
 
