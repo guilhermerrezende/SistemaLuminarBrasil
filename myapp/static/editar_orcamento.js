@@ -129,16 +129,14 @@ function carregarProdutosOrcamento(orcamentoId) {
             let imagemSrc = '';
 
             if (produto.caminho_imagem) {
-                if (produto.caminho_imagem.startsWith('/SistemaLuminarBrasil/uploads/')) {
-                    imagemSrc = `http://www.sistemaluminarbrasil.com.br${produto.caminho_imagem}`;
-                } else {
-                    imagemSrc = `http://www.sistemaluminarbrasil.com.br/SistemaLuminarBrasil/uploads/${produto.caminho_imagem.split('\\').pop()}`;
-                }
-                
+                imagemSrc = `http://www.sistemaluminarbrasil.com.br/uploads/${produto.caminho_imagem.split('/').pop()}`;
             }
+            
+                
+            
 
 
-            produtosDiv.innerHTML += `
+             produtosDiv.innerHTML += `
                 <fieldset>
                     <legend>Produto ${index + 1}</legend>
                     <input type="hidden" name="produtos[${index}][id]" value="${produto.id}">
