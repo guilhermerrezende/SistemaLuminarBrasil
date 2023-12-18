@@ -34,6 +34,9 @@ def get_db_connection():
     return conn
 
 
+@rotas_blueprint.route("/orcamento_sucesso")
+def orcamento_sucesso():
+    return render_template("orcamento_sucesso.html")
 
 @rotas_blueprint.route('/filtrar_produtos', methods=['GET'])
 def filtrar_produtos():
@@ -167,7 +170,7 @@ def criar_usuario():
 
 @rotas_blueprint.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory('/root/SistemaLuminarBrasil/uploads', filename)
 
 
 
@@ -889,4 +892,4 @@ def gerar_orcamento_form():
                                      prazo_entrega, forma_pagamento, num_parcelas, valor_parcela, entrada)
 
     # Enviar o arquivo PDF usando o caminho completo
-    return send_file(caminho_completo_pdf, as_attachment=True)
+    return redirect('/orcamento_sucesso')
