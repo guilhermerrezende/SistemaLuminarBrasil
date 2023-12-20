@@ -12,7 +12,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.permanent_session_lifetime = timedelta(minutes=190)  # Sessão expira após 30 minutos de inatividade
 
 
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['UPLOAD_FOLDER'] = '/var/www/SistemaLuminarBrasil/uploads'
 
 
 
