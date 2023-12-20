@@ -42,5 +42,16 @@
         <button onclick="window.location.href='/painel'">Voltar à Página Inicial</button>
         <button onclick="window.location.href='/home'">Gerar Novo Orçamento</button>
     </div>
+    <script>
+        window.onload = function() {
+            var pdfPath = "{{ url_for('static', filename=pdf_path) }}";
+            var link = document.createElement('a');
+            link.href = pdfPath;
+            link.download = 'download.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+    </script>
 </body>
 </html>
