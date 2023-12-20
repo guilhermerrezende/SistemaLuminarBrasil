@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="https://luminarbrasil.com.br/wp-content/uploads/2023/04/cropped-Design-sem-nome.png" type="image/png">
+    <title>CRM - Luminar Brasil</title>
+    <!-- Estilos existentes -->
+    <style>
+      /* Seus estilos existentes aqui */
+      /* Estilos adicionais para a página CRM */
+      .crm-container {
+          margin-left: 270px;
+          padding: 20px;
+      }
+      .crm-section {
+          background-color: #fff;
+          margin-bottom: 20px;
+          padding: 20px;
+          border-radius: 5px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .crm-section h2 {
+          margin-bottom: 15px;
+      }
+      .crm-table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+      .crm-table th, .crm-table td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+      }
+      .crm-table th {
+          background-color: #1A7B79;
+          color: white;
+      }
+      .crm-form input, .crm-form select, .crm-form button {
+          padding: 10px;
+          margin-bottom: 10px;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+      }
+      .crm-form button {
+          background-color: #1A7B79;
+          color: white;
+          border: none;
+      }
+      .crm-form button:hover {
+          background-color: #13856b;
+      }
+      /* Responsividade */
+      @media screen and (max-width: 768px) {
+          .crm-container {
+              margin-left: 0;
+          }
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar (mantenha o mesmo) -->
+        <aside class="sidebar">
+            <!-- Conteúdo do sidebar aqui -->
+        </aside>
+
+        <!-- Conteúdo principal do CRM -->
+        <div class="crm-container">
+            <h1>CRM - Gestão de Clientes</h1>
+            
+            <!-- Seção de Gráficos -->
+            <div class="crm-section">
+                <h2>Visão Geral das Vendas</h2>
+                <canvas id="salesChart"></canvas>
+            </div>
+
+            <!-- Seções adicionais (Clientes, Vinculação de Orçamentos, Acompanhamento de Vendas) -->
+
+        </div>
+    </div>
+
+    <footer>
+        © 2023 Luminar Brasil. Todos os direitos reservados. Guilherme Rezende Damaceno (62) 99382-2772
+    </footer>
+
+    <!-- Scripts JavaScript -->
+    <script>
+        // Exemplo de gráfico de vendas
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(ctx, {
+                type: 'pie', // Tipo de gráfico
+                data: {
+                    labels: ['Negociando', 'Fechado', 'Em Transporte', 'Entregue', 'Comissão Recebida', 'Finalizado'],
+                    datasets: [{
+                        label: 'Status das Vendas',
+                        data: [10, 20, 30, 40, 50, 60], // Substitua por dados reais
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distribuição de Vendas por Status'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

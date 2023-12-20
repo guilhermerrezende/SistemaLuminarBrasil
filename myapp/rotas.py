@@ -170,7 +170,7 @@ def criar_usuario():
 
 @rotas_blueprint.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory('/root/SistemaLuminarBrasil/uploads', filename)
+    return send_from_directory('/var/www/SistemaLuminarBrasil/uploads', filename)
 
 
 
