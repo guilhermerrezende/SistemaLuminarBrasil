@@ -892,4 +892,4 @@ def gerar_orcamento_form():
                                      prazo_entrega, forma_pagamento, num_parcelas, valor_parcela, entrada)
 
     # Enviar o arquivo PDF usando o caminho completo
-    return redirect('/orcamento_sucesso')
+    return send_file(caminho_completo_pdf, as_attachment=True)
