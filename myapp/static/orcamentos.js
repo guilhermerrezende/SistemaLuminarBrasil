@@ -5,53 +5,39 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Função para carregar todos os orçamentos
 function carregarOrcamentos() {
-    fetch('/get_orcamentos', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin'
-    })
-    .then(response => response.json())
-    .then(orcamentos => {
-        exibirOrcamentos(orcamentos);
-    })
-    .catch(error => console.error('Erro ao carregar orçamentos:', error));
+    fetchOrcamentos('/get_orcamentos')
+        .then(orcamentos => exibirOrcamentos(orcamentos))
+        .catch(error => console.error('Erro ao carregar orçamentos:', error));
 }
 
+// Função para filtrar orçamentos de acordo com a query de pesquisa
 function filtrarOrcamentos(query) {
-    fetch(`/filtrar_orcamentos?query=${query}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin'
-    })
-    .then(response => response.json())
-    .then(orcamentos => {
-        exibirOrcamentos(orcamentos);
-    })
-    .catch(error => console.error('Erro ao filtrar orçamentos:', error));
+    fetchOrcamentos(`/filtrar_orcamentos?query=${query}`)
+        .then(orcamentos => exibirOrcamentos(orcamentos))
+        .catch(error => console.error('Erro ao filtrar orçamentos:', error));
 }
 
+// Função para buscar orçamentos da API
+function fetchOrcamentos(url) {
+    return fetch(url, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin'
+    }).then(response => response.json());
+}
+
+// Exibe os orçamentos na tabela
 function exibirOrcamentos(orcamentos) {
     const tabelaOrcamentos = document.getElementById('orcamento-list');
     tabelaOrcamentos.innerHTML = '';
 
     orcamentos.forEach(orcamento => {
-        let dataFormatada = 'Data não disponível'; 
-        if (orcamento[4] && typeof orcamento[4] === 'string' && orcamento[4].trim() !== '') {
-            const data = new Date(orcamento[4]);
-            if (!isNaN(data.getTime())) {
-                dataFormatada = data.toLocaleDateString('pt-BR');
-            }
-        }
-
         const linha = document.createElement('tr');
         linha.innerHTML = `
             <td>${orcamento[1]}</td>
-            <td>${dataFormatada}</td>
+            <td>${formatarData(orcamento[4])}</td>
             <td>
                 <button onclick="editarOrcamento(${orcamento[0]})">Editar</button>
                 <button onclick="excluirOrcamento(${orcamento[0]})">Excluir</button>
@@ -61,26 +47,29 @@ function exibirOrcamentos(orcamentos) {
     });
 }
 
+// Formata a data no formato brasileiro
+function formatarData(dataStr) {
+    if (!dataStr || typeof dataStr !== 'string') return 'Data não disponível';
+    const data = new Date(dataStr);
+    return isNaN(data.getTime()) ? 'Data não disponível' : data.toLocaleDateString('pt-BR');
+}
+
+// Redireciona para a página de edição do orçamento
 function editarOrcamento(id) {
-    // Redireciona para a página de edição do orçamento
     window.location.href = `/editar_orcamento/${id}`;
 }
 
+// Exclui um orçamento e atualiza a lista
 function excluirOrcamento(id) {
-    if (confirm('Tem certeza de que deseja excluir este orçamento?')) {
-        fetch(`/delete_orcamento/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json()) // Converte a resposta em JSON
+    if (!confirm('Tem certeza de que deseja excluir este orçamento?')) return;
+
+    fetch(`/delete_orcamento/${id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' } })
+        .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
                 alert('Orçamento excluído com sucesso!');
                 carregarOrcamentos();
             } else {
-                // Exibe a mensagem de erro do servidor
                 alert(`Erro ao excluir orçamento: ${data.message}`);
             }
         })
@@ -88,10 +77,4 @@ function excluirOrcamento(id) {
             console.error('Erro ao excluir orçamento:', error);
             alert('Erro ao excluir orçamento. Por favor, verifique o console para mais detalhes.');
         });
-    }
 }
-
-
-
-
-

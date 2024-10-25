@@ -1,70 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - Luminar Brasil</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            color: #000;
-        }
-        .container {
-            max-width: 600px;
-            margin-top: 30px;
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .logo img {
-            width: 150%;
-            max-width: 360px;
-        }
-        h2 {
-            font-size: 30px;
-            text-align: center;
-            color: #1A7B79;
-            margin-bottom: 30px;
-        }
-        .form-group label {
-            color: #1A7B79;
-            font-size: 18px;
-        }
-        .form-control {
-            font-size: 16px;
-            padding: 10px;
-        }
-        .btn-primary {
-            background-color: #1A7B79;
-            border: none;
-            padding: 10px;
-            font-size: 18px;
-        }
-        .btn-primary:hover {
-            background-color: #13856b;
-        }
-        .contact-text {
-            font-size: 14px;
-            text-align: center;
-            margin-top: 30px;
-        }
-        .contact-text a {
-            color: #1A7B79;
-            text-decoration: none;
-        }
-        .contact-text a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/login.css"> <!-- CSS externo para estilo -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
@@ -86,38 +27,10 @@
         <button type="submit" class="btn btn-primary btn-block">Login</button>
     </form>
     <div class="contact-text">
-        <p>Caso queira fazer parte do nosso time de vendedores ou tenha algum problema, entre em contato com <a href="mailto:gerentedeti@luminarbrasil.com.br">gerentedeti@luminarbrasil.com.br</a></p>
+        <p>Quer fazer parte do nosso time? Contate <a href="mailto:gerentedeti@luminarbrasil.com.br">gerentedeti@luminarbrasil.com.br</a></p>
     </div>
 </div>
 
-<script>
-    $("#loginForm").submit(function(event){
-        event.preventDefault();
-        
-        var email = $("#email").val();
-        var senha = $("#senha").val();
-        
-        $.ajax({
-            url: '/login',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                email: email,
-                senha: senha
-            }),
-            success: function(response){
-                if(response.status === 'success'){
-                    window.location.href = '/painel';
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function(){
-                alert('Erro ao fazer login. Tente novamente.');
-            }
-        });
-    });
-</script>
-
+<script src="static/login.js"></script> <!-- JavaScript externo para lógica de login -->
 </body>
 </html>

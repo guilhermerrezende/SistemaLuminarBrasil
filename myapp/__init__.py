@@ -1,26 +1,30 @@
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-import os
 from datetime import timedelta
+import os
 
-app = Flask(__name__, static_url_path='/static')
+# Função de fábrica para criar a aplicação
+def create_app():
+    app = Flask(__name__, static_url_path='/static')
 
-app.config['SECRET_KEY'] = os.urandom(32)
-app.secret_key = 'guilherme21'
-app.config['SESSION_TYPE'] = 'filesystem'
-app.permanent_session_lifetime = timedelta(minutes=190)  # Sessão expira após 30 minutos de inatividade
+    # Configurações de segurança e sessão
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', os.urandom(32))
+    app.config['SESSION_TYPE'] = 'filesystem'
+    app.permanent_session_lifetime = timedelta(minutes=int(os.getenv('SESSION_LIFETIME', 190)))
 
+    # Configuração do diretório de uploads usando variável de ambiente para maior flexibilidade
+    app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER', 'uploads')
 
-app.config['UPLOAD_FOLDER'] = '/var/www/SistemaLuminarBrasil/uploads'
+    # Inicializando extensões
+    bcrypt = Bcrypt(app)
+    CORS(app, supports_credentials=True)
 
+    # Registro do Blueprint das rotas
+    from .rotas import rotas_blueprint
+    app.register_blueprint(rotas_blueprint)
 
+    return app
 
-bcrypt = Bcrypt(app)
-           
-
-
-CORS(app, supports_credentials=True)
-
-from .rotas import rotas_blueprint  # Importando o Blueprint
-app.register_blueprint(rotas_blueprint)
+# Instância da aplicação
+app = create_app()

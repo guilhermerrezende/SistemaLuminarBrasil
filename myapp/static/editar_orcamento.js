@@ -3,178 +3,136 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarProdutosOrcamento(orcamentoId);
 });
 
+// Funções utilitárias
 function getOrcamentoIdFromUrl() {
-    const path = window.location.pathname;
-    const pathSegments = path.split('/');
+    const pathSegments = window.location.pathname.split('/');
     return pathSegments[pathSegments.length - 1];
 }
+
+// S: Princípio da Responsabilidade Única (SRP)
+// Cada função é responsável por uma única tarefa, facilitando o entendimento e manutenção.
+
 function adicionarCampoProduto(index) {
     const produtosDiv = document.getElementById('produtosContainer');
-    const novoProdutoHTML = `
+    produtosDiv.innerHTML += criarProdutoHTML(index);
+    atualizarQuantidadeProdutos();
+}
 
+// Função que gera HTML para um novo produto
+function criarProdutoHTML(index) {
+    return `
         <fieldset id="produto_${index}">
-
             <legend>Produto ${index + 1}</legend>
-
             <label for="produto_nome_${index}">Nome do Produto:</label>
-            
             <input type="text" id="produto_nome_${index}" name="produtos[${index}][nome]"><br><br>
             <label for="produto_quantidade_${index}">Quantidade:</label>
             <input type="number" id="produto_quantidade_${index}" name="produtos[${index}][quantidade]"><br><br>
             <label for="produto_preco_${index}">Preço do Produto:</label>
             <input type="number" id="produto_preco_${index}" name="produtos[${index}][preco_produto]" step="0.01"><br><br>
-
-            <input type="hidden" id="produto_imagem_caminho_${index}" name="algumNome">
             <input type="file" name="produtos[${index}][imagem]" id="imagem${index}" onchange="atualizarPreviewImagem(this, ${index})"><br><br>
-            <button type="button" onclick="excluirProduto(${novoIndex})">Excluir Produto</button>
-
+            <button type="button" onclick="removerCampoProduto(${index})">Remover Produto</button>
         </fieldset>
     `;
-    produtosDiv.innerHTML += novoProdutoHTML;
-    atualizarQuantidadeProdutos();
 }
-function excluirProduto(index, produtoId) {
-    if (!confirm("Tem certeza que deseja excluir este produto?")) {
-        return;
+
+// O: Princípio do Aberto/Fechado (OCP)
+// As funções `adicionarCampoProduto` e `criarProdutoHTML` podem ser facilmente estendidas sem modificá-las.
+
+function atualizarPreviewImagem(input, index) {
+    const preview = document.getElementById(`imagem_preview_${index}`);
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
     }
-
-    fetch(`/excluir_produto/${produtoId}`, {
-        
-        method: 'POST'
-        // Inclua headers, credenciais ou corpo da requisição se necessário
-    })
-    
-    .then(response => response.json())
-    .then(data => {
-        if (produtoId === undefined || produtoId === null) {
-            console.error("Produto ID é undefined ou null");
-            return;
-        }
-        
-        if (data.status === 'success') {
-            const produtoFieldset = document.getElementById(`produto_${index}`);
-            if (produtoFieldset) {
-                produtoFieldset.remove();
-                atualizarQuantidadeProdutos();
-            }
-        } else {
-            alert('Erro ao excluir produto');
-        }
-    })
-    .catch(error => console.error('Erro ao excluir produto:', error));
 }
 
+// L: Princípio de Substituição de Liskov (LSP)
+// Esta função é simples e não viola LSP, pois `adicionarProduto` pode chamar `adicionarCampoProduto` sem alterar o comportamento.
 
 function adicionarProduto() {
     const produtosDiv = document.getElementById('produtosContainer');
-    const numeroProdutos = produtosDiv.childElementCount; // Conta o número de fieldsets de produto
-    const novoIndex = numeroProdutos; // Índice do novo produto
-
-    const novoProdutoHTML = `
-        <fieldset id="produto_${novoIndex}">
-            <legend>Produto ${novoIndex + 1}</legend>
-            <label for="produto_nome_${novoIndex}">Nome do Produto:</label>
-            <input type="text" id="produto_nome_${novoIndex}" name="produtos[${novoIndex}][nome]"><br><br>
-            <label for="produto_quantidade_${novoIndex}">Quantidade:</label>
-            <input type="number" id="produto_quantidade_${novoIndex}" name="produtos[${novoIndex}][quantidade]"><br><br>
-            <label for="produto_preco_${novoIndex}">Preço do Produto:</label>
-            <input type="number" id="produto_preco_${novoIndex}" name="produtos[${novoIndex}][preco_produto]" step="0.01"><br><br>
-
-
-            <label for="produto_imagem_${novoIndex}">Imagem do Produto:</label>
-            <img id="imagem_preview_${novoIndex}" src="" style="display:none; max-width: 100px; max-height: 100px;"><br><br>
-            <input type="file" name="produtos[${novoIndex}][imagem]" id="imagem${novoIndex}" onchange="atualizarPreviewImagem(this, ${novoIndex})"><br><br>
-            <input type="hidden" id="produto_imagem_caminho_${novoIndex}" name="algumNome">
-
-
-            <button type="button" onclick="excluirProduto(${novoIndex})">Excluir Produto</button>
-            <button type="button" onclick="adicionarProduto()">Adicionar Produto</button>
-            <button type="button" onclick="removerCampoProduto(${novoIndex})">Remover Campo</button>
-        </fieldset>
-    `;
-    produtosDiv.innerHTML += novoProdutoHTML;
+    const novoIndex = produtosDiv.childElementCount;
+    adicionarCampoProduto(novoIndex);
     atualizarQuantidadeProdutos();
 }
-function removerCampoProduto(index) {
-    const produtoFieldset = document.getElementById(`produto_${index}`);
-    if (produtoFieldset) {
-        produtoFieldset.remove();
-        atualizarQuantidadeProdutos();
-    }
-}
 
-
-
+// Função para atualizar o total de produtos
 function atualizarQuantidadeProdutos() {
     const produtosDiv = document.getElementById('produtosContainer');
-    const numeroProdutos = produtosDiv.childElementCount;
-    const inputQuantidadeProdutos = document.getElementById('quantidade_produtos');
-    inputQuantidadeProdutos.value = numeroProdutos;
+    document.getElementById('quantidade_produtos').value = produtosDiv.childElementCount;
 }
 
-
+// Função para carregar os produtos de um orçamento específico
 function carregarProdutosOrcamento(orcamentoId) {
     fetch(`/get_produtos_orcamento/${orcamentoId}`, { method: 'GET' })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erro ao buscar produtos do orçamento');
-        }
-        return response.json();
-    })
-    .then(produtos => {
-
-        const produtosDiv = document.getElementById('produtosContainer');
-        produtos.forEach((produto, index) => {
-
-            let imagemSrc = '';
-
-            if (produto.caminho_imagem) {
-                imagemSrc = `http://www.sistemaluminarbrasil.com.br/uploads/${produto.caminho_imagem.split('/').pop()}`;
-            }
-            
-                
-            
-
-
-             produtosDiv.innerHTML += `
-                <fieldset>
-                    <legend>Produto ${index + 1}</legend>
-                    <input type="hidden" name="produtos[${index}][id]" value="${produto.id}">
-                    <label for="produto_nome_${index}">Nome do Produto:</label>
-                    <input type="text" id="produto_nome_${index}" name="produtos[${index}][nome]" value="${produto.nome}"><br><br>
-                    <label for="produto_quantidade_${index}">Quantidade:</label>
-                    <input type="number" id="produto_quantidade_${index}" name="produtos[${index}][quantidade]" value="${produto.quantidade}"><br><br>
-                    <label for="produto_preco_${index}">Preço do Produto:</label>
-                    <input type="number" id="produto_preco_${index}" name="produtos[${index}][preco_produto]" value="${produto.preco_unitario}" step="0.01"><br><br>
-                    
-                    <input type="hidden" name="produtos[${index}][caminho_imagem]" value="${imagemSrc}"> 
-                    <td>${imagemSrc ? `<img src="${imagemSrc}" alt="Imagem do Produto" width="50" height="50">` : ''}</td>
-                    <input type="file" name="produtos[${index}][imagem]" id="imagem${index}"> <br/><br/>                
-                    ${imagemSrc ? `<span>Se não escolher uma nova imagem, a imagem atual será mantida.</span>` : ''}
-
-                    <button type="button" onclick="adicionarProduto()">Adicionar Produto</button>
-                    <button type="button" onclick="excluirProduto(${index}, ${produto.id})">Excluir Produto</button>
-
-                </fieldset>
-            `;
-            
-            atualizarQuantidadeProdutos();
+        .then(response => response.json())
+        .then(produtos => renderizarProdutos(produtos))
+        .catch(error => {
+            console.error(error);
+            alert('Não foi possível carregar os produtos do orçamento.');
         });
-    })
-    .catch(error => {
-        console.error(error);
-        alert('Não foi possível carregar os produtos do orçamento.');
-    });
 }
 
+// Função para renderizar produtos na página
+function renderizarProdutos(produtos) {
+    const produtosDiv = document.getElementById('produtosContainer');
+    produtos.forEach((produto, index) => {
+        produtosDiv.innerHTML += criarProdutoHTMLParaEdicao(produto, index);
+    });
+    atualizarQuantidadeProdutos();
+}
 
+// Função para criar HTML de produtos já existentes
+function criarProdutoHTMLParaEdicao(produto, index) {
+    const imagemSrc = produto.caminho_imagem ? `/uploads/${produto.caminho_imagem.split('/').pop()}` : '';
+    return `
+        <fieldset id="produto_${index}">
+            <legend>Produto ${index + 1}</legend>
+            <input type="hidden" name="produtos[${index}][id]" value="${produto.id}">
+            <label for="produto_nome_${index}">Nome do Produto:</label>
+            <input type="text" id="produto_nome_${index}" name="produtos[${index}][nome]" value="${produto.nome}"><br><br>
+            <label for="produto_quantidade_${index}">Quantidade:</label>
+            <input type="number" id="produto_quantidade_${index}" name="produtos[${index}][quantidade]" value="${produto.quantidade}"><br><br>
+            <label for="produto_preco_${index}">Preço do Produto:</label>
+            <input type="number" id="produto_preco_${index}" name="produtos[${index}][preco_produto]" value="${produto.preco_unitario}" step="0.01"><br><br>
+            ${imagemSrc ? `<img src="${imagemSrc}" id="imagem_preview_${index}" style="max-width: 100px; max-height: 100px;"><br><br>` : ''}
+            <input type="file" name="produtos[${index}][imagem]" id="imagem${index}" onchange="atualizarPreviewImagem(this, ${index})"><br><br>
+            <button type="button" onclick="excluirProduto(${index}, ${produto.id})">Excluir Produto</button>
+        </fieldset>
+    `;
+}
+
+// Função para excluir um produto do orçamento
+function excluirProduto(index, produtoId) {
+    if (!confirm("Tem certeza que deseja excluir este produto?")) return;
+    fetch(`/excluir_produto/${produtoId}`, { method: 'DELETE' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.getElementById(`produto_${index}`).remove();
+                atualizarQuantidadeProdutos();
+            } else {
+                alert('Erro ao excluir produto');
+            }
+        })
+        .catch(error => console.error('Erro ao excluir produto:', error));
+}
+
+// I: Princípio da Segregação de Interface (ISP)
+// A função `carregarProdutosOrcamento` só depende de dados necessários, sem sobrecarga de interfaces.
+
+// D: Princípio da Inversão de Dependência (DIP)
+// Não aplicável diretamente no JavaScript, mas a estrutura do código permite adaptação ao backend.
 
 document.getElementById('editOrcamentoForm').addEventListener('submit', function(event) {
     event.preventDefault();
-
-    let formData = new FormData(this);
-
     const orcamentoId = getOrcamentoIdFromUrl();
+    const formData = new FormData(this);
 
     fetch(`/editar_orcamento/${orcamentoId}`, {
         method: 'POST',
@@ -182,9 +140,7 @@ document.getElementById('editOrcamentoForm').addEventListener('submit', function
         credentials: 'same-origin'
     })
     .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+        if (!response.ok) throw new Error('Erro na resposta da rede');
         return response.json();
     })
     .then(data => {
@@ -197,6 +153,6 @@ document.getElementById('editOrcamentoForm').addEventListener('submit', function
     })
     .catch(error => {
         console.error('Erro ao atualizar orçamento:', error);
-        alert('Erro ao atualizar orçamento. Por favor, verifique a conexão e tente novamente.');
+        alert('Erro ao atualizar orçamento. Verifique a conexão e tente novamente.');
     });
 });
